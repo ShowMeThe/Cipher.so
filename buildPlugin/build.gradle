@@ -1,13 +1,14 @@
 apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'maven'
+//apply plugin: 'com.novoda.bintray-release'
 
 buildscript {
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.8.0'
+       // classpath 'com.novoda:bintray-release:0.8.0'
     }
 }
 
@@ -21,7 +22,7 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation 'com.squareup:javapoet:1.9.0'
-    implementation 'com.android.tools.build:gradle:3.0.1'
+    implementation 'com.android.tools.build:gradle:7.2.2'
 }
 
 sourceCompatibility = "1.8"
@@ -31,14 +32,14 @@ targetCompatibility = "1.8"
 group = 'net.idik.lib.security'
 archivesBaseName = 'cipher.so'
 version = '0.0.4'
-
+def dirFile = "${project.rootProject.rootDir.parentFile}"
 task zipNativeArchive(type: Zip) {
     destinationDir project.file("build/libs")
     archiveName "$archivesBaseName-${version}.jarx"
     from project.zipTree("build/libs/$archivesBaseName-${version}.jar")
     include "META-INF/**"
     include "net/**"
-    from "${project.rootProject.file("devso").canonicalPath}"
+    from "$dirFile" + "/devso/"
     include "src/main/**"
     include "CMakeLists.txt"
     exclude "src/main/cpp/include/extern-keys.h"
@@ -59,26 +60,26 @@ task zipNativeArchive(type: Zip) {
 tasks['jar'].finalizedBy zipNativeArchive
 
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri('../repo'))
-        }
-    }
-}
-
-Properties properties = new Properties()
-properties.load(project.file('../local.properties').newDataInputStream())
-
-publish {
-    userOrg = 'idik-net'
-    groupId = project.group
-    artifactId = archivesBaseName
-    publishVersion = project.version
-    desc = 'A sample way to store secure message in .so librarly'
-    website = 'https://github.com/MEiDIK/Cipher.so'
-    repoName = 'Cipher.so'
-    bintrayUser = properties.getProperty("bintray.user")
-    bintrayKey = properties.getProperty("bintray.apikey")
-    dryRun = false
-}
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: uri('../repo'))
+//        }
+//    }
+//}
+//
+//Properties properties = new Properties()
+//properties.load(project.file('../local.properties').newDataInputStream())
+//
+//publish {
+//    userOrg = 'idik-net'
+//    groupId = project.group
+//    artifactId = archivesBaseName
+//    publishVersion = project.version
+//    desc = 'A sample way to store secure message in .so librarly'
+//    website = 'https://github.com/ShowMeThe/Cipher.so'
+//    repoName = 'Cipher.so'
+//    bintrayUser = properties.getProperty("bintray.user")
+//    bintrayKey = properties.getProperty("bintray.apikey")
+//    dryRun = false
+//}

@@ -1,1 +1,3 @@
-include ':sample', ':buildSrc', ':devso', ':sample2'
+include ':sample'
+include ':devso'
+//includeBuild 'buildPlugin'

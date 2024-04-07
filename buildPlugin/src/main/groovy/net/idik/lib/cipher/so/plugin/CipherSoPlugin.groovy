@@ -56,7 +56,8 @@ class CipherSoPlugin implements Plugin<Project> {
                 it.signature = configs.signature
                 it.secretKey = configs.encryptSeed
             }
-            project.getTasksByName("generateJsonModel${StringUtils.capitalize(variant.name)}", false).each {
+            project.tasks.findAll {it.getName().contains("configureCMake")}
+            .each {
                 it.dependsOn copyNativeArchiveTask
                 it.dependsOn generateCipherSoExternalTask
             }
